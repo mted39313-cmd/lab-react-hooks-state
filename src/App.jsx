@@ -1,38 +1,45 @@
-import React, { useState } from 'react'
-import ProductList from './components/ProductList'
-import DarkModeToggle from './components/DarkModeToggle'
-import Cart from './components/Cart'
+import React, { useState } from "react";
+import DarkModeToggle from "./components/DarkModeToggle";
+import ProductList, { sampleProducts } from "./components/ProductList";
+import Cart from "./components/Cart";
 
-const App = () => {
-  // TODO: Implement state for dark mode toggle
+export default function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [category, setCategory] = useState("All");
 
-  // TODO: Implement state for cart management
+  function handleAddToCart(product) {
+    setCart([...cart, product]);
+  }
 
-  // TODO: Implement state for category filtering
+  const filteredProducts =
+    category === "All"
+      ? sampleProducts
+      : sampleProducts.filter((p) => p.category === category);
 
   return (
-    <div>
-      <h1>🛒 Shopping App</h1>
-      <p>
-        Welcome! Your task is to implement filtering, cart management, and dark
-        mode.
-      </p>
+    <div className={`app ${darkMode ? "dark-mode" : "light-mode"}`}>
+      <h1>Grocery Shopping App</h1>
 
-      {/* TODO: Render DarkModeToggle and implement dark mode functionality */}
+      <DarkModeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
 
-      {/* TODO: Implement category filter dropdown */}
-      <label>Filter by Category: </label>
-      <select>
-        <option value="all">All</option>
-        <option value="Fruits">Fruits</option>
-        <option value="Dairy">Dairy</option>
-      </select>
+      <div>
+        <label htmlFor="category-filter">Filter by Category: </label>
+        <select
+          id="category-filter"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="All">All</option>
+          <option value="Dairy">Dairy</option>
+          <option value="Bakery">Bakery</option>
+          <option value="Fruits">Fruits</option>
+          <option value="Produce">Produce</option>
+        </select>
+      </div>
 
-      <ProductList />
-
-      {/* TODO: Implement and render Cart component */}
+      <ProductList products={filteredProducts} onAddToCart={handleAddToCart} />
+      <Cart cart={cart} />
     </div>
-  )
+  );
 }
-
-export default App
